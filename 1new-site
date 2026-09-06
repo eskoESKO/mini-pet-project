@@ -1,14 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <title>Мой первый проект</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой интерактивный сайт</title>
   <style>
-    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #111; color: white; }
-    h1 { font-size: 3rem; text-align: center; }
+    :root {
+      --bg: #0d1117;
+      --card-bg: rgba(22, 27, 34, 0.8);
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --title: #ffffff;
+    }
+
+    .neon-theme {
+      --bg: #090a10;
+      --card-bg: rgba(18, 16, 38, 0.85);
+      --accent: #ff007f;
+      --text: #e0d8f0;
+      --title: #00f0ff;
+    }
+
+    * { box-sizing: border-box; transition: all 0.25s ease; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg);
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 35px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      color: var(--title);
+      margin: 0 0 10px 0;
+      font-size: 1.8rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .clock {
+      font-family: monospace;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 25px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .status-box {
+      margin-top: 25px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
   </style>
 </head>
 <body>
-  <h1>Привет, мир! Мой сайт на GitHub </h1>
+
+  <div class="card">
+    <div class="badge">● LIVE ON GITHUB</div>
+    <h1 id="headline">Командный центр</h1>
+    
+    <div class="clock" id="clock">00:00:00</div>
+
+    <div class="btn-group">
+      <button onclick="boostCounter()">💥 Зарядить кликер: <span id="counter">0</span></button>
+      <button class="btn-secondary" onclick="toggleTheme()">🎨 Сменить атмосферу</button>
+      <button class="btn-secondary" onclick="generateIdea()">🎲 Случайная идея для кода</button>
+    </div>
+
+    <div class="status-box" id="status">Нажмите любую кнопку выше</div>
+  </div>
+
+  <script>
+    // 1. Часы реального времени
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Интерактивный кликер
+    let clicks = 0;
+    function boostCounter() {
+      clicks++;
+      document.getElementById('counter').textContent = clicks;
+      const statuses = ['Разгон пошел! ⚡', 'Двойной буст 🚀', 'Сервер нагревается 🔥', 'Критическая мощь 🤯'];
+      document.getElementById('status').textContent = statuses[clicks % statuses.length];
+    }
+
+    // 3. Переключатель темы (GitHub Dark <-> Cyber Neon)
+    function toggleTheme() {
+      document.body.classList.toggle('neon-theme');
+      const isNeon = document.body.classList.contains('neon-theme');
+      document.getElementById('status').textContent = isNeon ? 'Включен режим Neon 🔮' : 'Возврат к классическому стилю 🌒';
+    }
+
+    // 4. Генератор идей
+    const ideas = [
+      'Добавить кнопку воспроизведения 8-битного звука',
+      'Прикрутить калькулятор крипты или валют',
+      'Сделать мини-игру крестики-нолики прямо тут',
+      'Сделать генератор цитат из любимых мемов'
+    ];
+    function generateIdea() {
+      const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
+      document.getElementById('status').textContent = '💡 ' + randomIdea;
+    }
+  </script>
 </body>
 </html>
